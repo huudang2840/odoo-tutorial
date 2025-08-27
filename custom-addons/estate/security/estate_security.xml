@@ -10,110 +10,84 @@
     <!-- Groups -->
     <record id="group_estate_manager" model="res.groups">
         <field name="name">Estate Manager</field>
-        <field name="category_id" ref="estate.estate_security_category"/>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="estate.estate_security_category" />
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
     </record>
 
     <record id="group_estate_buyer" model="res.groups">
         <field name="name">Estate Buyer</field>
-        <field name="category_id" ref="estate.estate_security_category"/>
-        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="category_id" ref="estate.estate_security_category" />
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]" />
     </record>
 
     <!-- Record Rules -->
 
-    <!-- Buyer: chỉ đọc Property -->
+    <!-- Property Rules -->
     <record id="rule_property_buyer_readonly" model="ir.rule">
         <field name="name">Property - Buyer read only</field>
-        <field name="model_id" ref="estate.model_estate_property"/>
+        <field name="model_id" ref="estate.model_estate_property" />
         <field name="domain_force">[(1,'=',1)]</field>
-        <field name="groups" eval="[(4, ref('estate.group_estate_buyer'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_unlink" eval="False"/>
+        <field name="groups" eval="[(4, ref('estate.group_estate_buyer'))]" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
     </record>
 
-    <!-- Manager: full Property -->
     <record id="rule_property_manager_full" model="ir.rule">
         <field name="name">Property - Manager full</field>
-        <field name="model_id" ref="estate.model_estate_property"/>
+        <field name="model_id" ref="estate.model_estate_property" />
         <field name="domain_force">[(1,'=',1)]</field>
-        <field name="groups" eval="[(4, ref('estate.group_estate_manager'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_unlink" eval="True"/>
+        <field name="groups" eval="[(4, ref('estate.group_estate_manager'))]" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="True" />
+        <field name="perm_create" eval="True" />
+        <field name="perm_unlink" eval="True" />
     </record>
 
-    <!-- Buyer: tạo offer mới -->
-    <record id="rule_offer_buyer_create" model="ir.rule">
-        <field name="name">Offer - Buyer create new</field>
-        <field name="model_id" ref="estate.model_estate_property_offer"/>
+    <!-- Offer Rules -->
+    <record id="rule_offer_buyer_access" model="ir.rule">
+        <field name="name">Offer - Buyer access</field>
+        <field name="model_id" ref="estate.model_estate_property_offer" />
         <field name="domain_force">[(1,'=',1)]</field>
-        <field name="groups" eval="[(4, ref('estate.group_estate_buyer'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_unlink" eval="False"/>
+        <field name="groups" eval="[(4, ref('estate.group_estate_buyer'))]" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="True" />
+        <field name="perm_create" eval="True" />
+        <field name="perm_unlink" eval="True" />
     </record>
 
-    <!-- Buyer: thấy TẤT CẢ offer của chính mình (mọi trạng thái) - chỉ read -->
-    <record id="rule_offer_buyer_read_own" model="ir.rule">
-        <field name="name">Offer - Buyer read own</field>
-        <field name="model_id" ref="estate.model_estate_property_offer"/>
-        <field name="domain_force">[('partner_id','=',user.partner_id.id)]</field>
-        <field name="groups" eval="[(4, ref('estate.group_estate_buyer'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_unlink" eval="False"/>
-    </record>
-
-    <!-- Buyer: tạo/sửa offer của chính mình khi status còn trống -->
-    <record id="rule_offer_buyer_edit_own_pending" model="ir.rule">
-        <field name="name">Offer - Buyer create/edit own pending</field>
-        <field name="model_id" ref="estate.model_estate_property_offer"/>
-        <field name="domain_force">[('partner_id','=',user.partner_id.id), ('status','=', False)]</field>
-        <field name="groups" eval="[(4, ref('estate.group_estate_buyer'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_unlink" eval="False"/>
-    </record>
-
-    <!-- Manager: full Offer -->
     <record id="rule_offer_manager_full" model="ir.rule">
         <field name="name">Offer - Manager full</field>
-        <field name="model_id" ref="estate.model_estate_property_offer"/>
+        <field name="model_id" ref="estate.model_estate_property_offer" />
         <field name="domain_force">[(1,'=',1)]</field>
-        <field name="groups" eval="[(4, ref('estate.group_estate_manager'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_unlink" eval="True"/>
+        <field name="groups" eval="[(4, ref('estate.group_estate_manager'))]" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="True" />
+        <field name="perm_create" eval="True" />
+        <field name="perm_unlink" eval="True" />
     </record>
 
-    <!-- Type: Buyer chỉ đọc, Manager full -->
+    <!-- Type Rules -->
     <record id="rule_type_buyer_readonly" model="ir.rule">
         <field name="name">Type - Buyer read only</field>
-        <field name="model_id" ref="estate.model_estate_property_type"/>
+        <field name="model_id" ref="estate.model_estate_property_type" />
         <field name="domain_force">[(1,'=',1)]</field>
-        <field name="groups" eval="[(4, ref('estate.group_estate_buyer'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="False"/>
-        <field name="perm_create" eval="False"/>
-        <field name="perm_unlink" eval="False"/>
+        <field name="groups" eval="[(4, ref('estate.group_estate_buyer'))]" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
     </record>
 
     <record id="rule_type_manager_full" model="ir.rule">
         <field name="name">Type - Manager full</field>
-        <field name="model_id" ref="estate.model_estate_property_type"/>
+        <field name="model_id" ref="estate.model_estate_property_type" />
         <field name="domain_force">[(1,'=',1)]</field>
-        <field name="groups" eval="[(4, ref('estate.group_estate_manager'))]"/>
-        <field name="perm_read" eval="True"/>
-        <field name="perm_write" eval="True"/>
-        <field name="perm_create" eval="True"/>
-        <field name="perm_unlink" eval="True"/>
+        <field name="groups" eval="[(4, ref('estate.group_estate_manager'))]" />
+        <field name="perm_read" eval="True" />
+        <field name="perm_write" eval="True" />
+        <field name="perm_create" eval="True" />
+        <field name="perm_unlink" eval="True" />
     </record>
 </odoo>

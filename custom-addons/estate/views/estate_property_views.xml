@@ -54,30 +54,47 @@
 
                     <notebook>
                         <page string="Offers">
-                            <!-- default_property_id để auto link offer với property -->
-                            <field name="offer_ids" context="{'default_property_id': active_id}">
-                                <tree editable="bottom">
+                            <field name="offer_ids"
+                                context="{'default_property_id': active_id}"
+                                options="{'no_create': False, 'no_edit': False}">
+
+                                <tree editable="bottom"
+                                    create="true"
+                                    delete="true"
+                                    decoration-success="status == 'accepted'"
+                                    decoration-danger="status == 'refused'"
+                                    decoration-muted="status == 'expired'">
+
                                     <field name="property_id" invisible="1" />
 
-                                    <!-- partner_id cho BUYER: chỉ-đọc -->
-                                    <field name="partner_id" readonly="1"
-                                        groups="estate.group_estate_buyer" />
-                                    <!-- partner_id cho MANAGER: chỉnh sửa được -->
-                                    <field name="partner_id" groups="estate.group_estate_manager" />
+                                    <!-- Buyer -->
+                                    <field name="partner_id"
+                                        groups="estate.group_estate_buyer"
+                                        options="{'no_create': True}" />
 
-                                    <field name="price" />
-                                    <field name="validity" />
+                                    <!-- Manager -->
+                                    <field name="partner_id"
+                                        groups="estate.group_estate_manager"
+                                        options="{'no_create': True}" />
+
+                                    <field name="price" readonly="status != False" />
+                                    <field name="validity" readonly="status != False" />
                                     <field name="deadline" readonly="1" />
                                     <field name="status" readonly="1" />
 
-                                    <button name="action_accept" string="Accept" type="object"
+                                    <button name="action_accept"
+                                        string="Accept"
+                                        type="object"
                                         class="oe_highlight"
                                         groups="estate.group_estate_manager"
-                                        invisible="['|', ('status','!=', False), ('property_id.state','=','sold')]" />
-                                    <button name="action_refuse" string="Refuse" type="object"
+                                        invisible="status != False or property_id.state == 'sold'" />
+
+                                    <button name="action_refuse"
+                                        string="Refuse"
+                                        type="object"
                                         class="oe_link"
                                         groups="estate.group_estate_manager"
-                                        invisible="['|', ('status','!=', False), ('property_id.state','=','sold')]" />
+                                        invisible="status != False or property_id.state == 'sold'" />
                                 </tree>
 
                                 <!-- Form con (popup) -->
@@ -85,27 +102,34 @@
                                     <group>
                                         <field name="property_id" invisible="1" />
 
-                                        <!-- buyer: readonly -->
-                                        <field name="partner_id" readonly="1"
-                                            groups="estate.group_estate_buyer" />
-                                        <!-- manager: editable -->
                                         <field name="partner_id"
-                                            groups="estate.group_estate_manager" />
+                                            groups="estate.group_estate_buyer"
+                                            options="{'no_create': True}" />
 
-                                        <field name="price" />
-                                        <field name="validity" />
+                                        <field name="partner_id"
+                                            groups="estate.group_estate_manager"
+                                            options="{'no_create': True}" />
+
+                                        <field name="price" readonly="status != False" />
+                                        <field name="validity" readonly="status != False" />
                                         <field name="deadline" readonly="1" />
                                         <field name="status" readonly="1" />
                                     </group>
                                     <footer>
-                                        <button name="action_accept" string="Accept" type="object"
+                                        <button name="action_accept"
+                                            string="Accept"
+                                            type="object"
                                             class="oe_highlight"
                                             groups="estate.group_estate_manager"
-                                            invisible="['|', ('status','!=', False), ('property_id.state','=','sold')]" />
-                                        <button name="action_refuse" string="Refuse" type="object"
+                                            invisible="status != False or property_id.state == 'sold'" />
+
+                                        <button name="action_refuse"
+                                            string="Refuse"
+                                            type="object"
                                             class="oe_link"
                                             groups="estate.group_estate_manager"
-                                            invisible="['|', ('status','!=', False), ('property_id.state','=','sold')]" />
+                                            invisible="status != False or property_id.state == 'sold'" />
+
                                         <button string="Close" special="cancel" class="oe_link" />
                                     </footer>
                                 </form>
@@ -115,13 +139,19 @@
                 </sheet>
 
                 <footer>
-                    <button name="action_sold" string="Mark as Sold" type="object"
+                    <button name="action_sold"
+                        string="Mark as Sold"
+                        type="object"
                         class="oe_highlight"
                         groups="estate.group_estate_manager"
-                        invisible="[('state','=','sold')]" />
-                    <button name="action_cancel" string="Cancel" type="object" class="oe_link"
+                        invisible="state == 'sold'" />
+
+                    <button name="action_cancel"
+                        string="Cancel"
+                        type="object"
+                        class="oe_link"
                         groups="estate.group_estate_manager"
-                        invisible="['|', ('state','=','sold'), ('state','=','canceled')]" />
+                        invisible="state == 'sold' or state == 'canceled'" />
                 </footer>
             </form>
         </field>

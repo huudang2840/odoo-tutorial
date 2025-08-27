@@ -6,11 +6,11 @@
         <field name="model">estate.property.offer</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="property_id"/>
-                <field name="partner_id"/>
-                <field name="price"/>
-                <field name="status"/>
-                <field name="deadline"/>
+                <field name="property_id" />
+                <field name="partner_id" />
+                <field name="price" />
+                <field name="status" />
+                <field name="deadline" />
             </tree>
         </field>
     </record>
@@ -24,35 +24,35 @@
                 <sheet>
                     <group>
                         <group>
-                            <field name="property_id"/>
+                            <field name="property_id" />
 
                             <!-- Manager: được chỉnh sửa -->
-                            <field name="partner_id" groups="estate.group_estate_manager"/>
+                            <field name="partner_id" groups="estate.group_estate_manager" />
 
-                            <!-- Buyer: chỉ xem (chỉ hiện với nhóm buyer) -->
-                            <field name="partner_id" groups="estate.group_estate_buyer" readonly="1"/>
+                            <!-- Buyer: chỉ xem -->
+                            <field name="partner_id" groups="estate.group_estate_buyer" readonly="1" />
                         </group>
                         <group>
-                            <field name="price"/>
-                            <field name="validity"/>
-                            <field name="deadline" readonly="1"/>
-                            <field name="status" readonly="1"/>
+                            <field name="price" />
+                            <field name="validity" />
+                            <field name="deadline" readonly="1" />
+                            <field name="status" readonly="1" />
                         </group>
                     </group>
                 </sheet>
 
                 <footer>
                     <button name="action_accept" string="Accept" type="object"
-                            class="oe_highlight"
-                            groups="estate.group_estate_manager"
-                            attrs="{'invisible': ['|', ('status','!=', False), ('property_id.state','=','sold')]}"/>
+                        class="oe_highlight"
+                        groups="estate.group_estate_manager"
+                        invisible="status != False or property_id.state == 'sold'" />
 
                     <button name="action_refuse" string="Refuse" type="object"
-                            class="oe_link"
-                            groups="estate.group_estate_manager"
-                            attrs="{'invisible': ['|', ('status','!=', False), ('property_id.state','=','sold')]}"/>
+                        class="oe_link"
+                        groups="estate.group_estate_manager"
+                        invisible="status != False or property_id.state == 'sold'" />
 
-                    <button string="Close" special="cancel" class="oe_link"/>
+                    <button string="Close" special="cancel" class="oe_link" />
                 </footer>
             </form>
         </field>
@@ -66,5 +66,5 @@
     </record>
 
     <menuitem id="menu_estate_offer" name="Offers"
-              parent="menu_estate_root" action="action_estate_property_offer" sequence="30"/>
+        parent="menu_estate_root" action="action_estate_property_offer" sequence="30" />
 </odoo>

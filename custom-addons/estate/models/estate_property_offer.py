@@ -87,8 +87,11 @@ class EstatePropertyOffer(models.Model):
     # Buyer tự tạo offer -> auto set partner_id = user.partner_id
     @api.model
     def create(self, vals):
-        if not vals.get("partner_id") and self.env.user.has_group("estate.group_estate_buyer"):
-            vals["partner_id"] = self.env.user.partner_id.id
+        #  Chặn tạo nếu Property đã sold
+        if vals.get("property_id"):
+            prop = self.env["estate.property"].browse(vals["property_id"])
+            if prop.state == "sold":
+                raise ValidationError("You cannot create an offer on a sold property.")
         return super().create(vals)
 
     def write(self, vals):
@@ -98,3 +101,9 @@ class EstatePropertyOffer(models.Model):
                 if rec.status:
                     raise ValidationError("You cannot modify an offer that is already decided.")
         return super().write(vals)
+
+    def default_get(self, fields):
+        res = super().default_get(fields)
+        if 'partner_id' in fields and not res.get('partner_id'):
+            res['partner_id'] = self.env.user.partner_id.id
+        return res
