@@ -1,5 +1,5 @@
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, AccessError
 from datetime import date, timedelta
 
 
@@ -32,7 +32,12 @@ class EstatePropertyOffer(models.Model):
             if rec.deadline:
                 rec.validity = (rec.deadline - today).days
 
+    def _check_manager(self):
+        if not self.env.user.has_group("estate.group_estate_manager"):
+            raise AccessError("Only Estate Managers can perform this action.")
+
     def action_accept(self):
+        self._check_manager()
         for offer in self:
             prop = offer.property_id
             if prop.state == "sold":
@@ -66,6 +71,7 @@ class EstatePropertyOffer(models.Model):
         return True
 
     def action_refuse(self):
+        self._check_manager()
         self.write({"status": "refused"})
         return True
     
@@ -77,3 +83,18 @@ class EstatePropertyOffer(models.Model):
         ])
         offers.write({"status": "expired"})
         return True
+
+    # Buyer tự tạo offer -> auto set partner_id = user.partner_id
+    @api.model
+    def create(self, vals):
+        if not vals.get("partner_id") and self.env.user.has_group("estate.group_estate_buyer"):
+            vals["partner_id"] = self.env.user.partner_id.id
+        return super().create(vals)
+
+    def write(self, vals):
+        # Chặn sửa khi đã có status (manager vẫn sửa nếu cần)
+        if not self.env.user.has_group("estate.group_estate_manager"):
+            for rec in self:
+                if rec.status:
+                    raise ValidationError("You cannot modify an offer that is already decided.")
+        return super().write(vals)
