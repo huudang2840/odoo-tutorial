@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- Action để mở model -->
+    <!-- Action -->
     <record id="action_estate_property" model="ir.actions.act_window">
         <field name="name">Properties</field>
         <field name="res_model">estate.property</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-    <!-- Menu -->
-    <menuitem id="menu_estate_root" name="Estate" sequence="10" />
-    <menuitem id="menu_estate_property" name="Properties" parent="menu_estate_root" action="action_estate_property" sequence="10" />
+    <!-- Menus -->
+    <menuitem id="menu_estate_root" name="Estate" sequence="10"/>
+    <menuitem id="menu_estate_property" name="Properties" parent="menu_estate_root" action="action_estate_property" sequence="10"/>
 
     <!-- Tree View -->
     <record id="view_estate_property_tree" model="ir.ui.view">
@@ -17,30 +17,79 @@
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="name" />
-                <field name="expected_price" />
-                <field name="active" />
+                <field name="name"/>
+                <field name="expected_price"/>
+                <field name="selling_price"/>
+                <field name="state"/>
+                <field name="property_type_id"/>
+                <field name="bedrooms"/>
+                <field name="garden"/>
+                <field name="invoice_id"/>
             </tree>
         </field>
     </record>
 
-    <!-- Form view -->
+    <!-- Form View -->
     <record id="view_estate_property_form" model="ir.ui.view">
         <field name="name">estate.property.form</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Property">
                 <sheet>
                     <group>
                         <group>
-                            <field name="name" />
-                            <field name="active" />
+                            <field name="name"/>
+                            <field name="property_type_id"/>
+                            <field name="state" readonly="1"/>
+                            <field name="invoice_id" readonly="1"/>
                         </group>
                         <group>
-                            <field name="expected_price" />
+                            <field name="expected_price"/>
+                            <field name="selling_price" readonly="1"/>
+                            <field name="bedrooms"/>
+                            <field name="garden"/>
                         </group>
                     </group>
+
+                    <notebook>
+                        <page string="Offers">
+                            <field name="offer_ids">
+                                <tree editable="bottom">
+                                    <field name="partner_id"/>
+                                    <field name="price"/>
+                                    <field name="validity"/>
+                                    <field name="deadline" readonly="1"/>
+                                    <field name="status" readonly="1"/>
+
+                                    <!-- Nút thao tác - syntax Odoo 17 -->
+                                    <button name="action_accept" string="Accept" type="object" class="oe_highlight" invisible="status or parent.state == 'sold'"/>
+                                    <button name="action_refuse" string="Refuse" type="object" class="oe_link" invisible="status or parent.state == 'sold'"/>
+                                </tree>
+
+                                <!-- Form con (popup) -->
+                                <form>
+                                    <group>
+                                        <field name="partner_id"/>
+                                        <field name="price"/>
+                                        <field name="validity"/>
+                                        <field name="deadline" readonly="1"/>
+                                        <field name="status" readonly="1"/>
+                                    </group>
+                                    <footer>
+                                        <button name="action_accept" string="Accept" type="object" class="oe_highlight" invisible="status or parent.state == 'sold'"/>
+                                        <button name="action_refuse" string="Refuse" type="object" class="oe_link" invisible="status or parent.state == 'sold'"/>
+                                        <button string="Close" special="cancel" class="btn-secondary"/>
+                                    </footer>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
+
+                <footer>
+                    <button name="action_sold" string="Mark as Sold" type="object" class="btn-primary" invisible="state == 'sold'"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="btn-secondary" invisible="state in ('sold','canceled')"/>
+                </footer>
             </form>
         </field>
     </record>
