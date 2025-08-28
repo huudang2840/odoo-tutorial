@@ -48,8 +48,9 @@ class EstatePropertyOffer(models.Model):
             prop.selling_price = offer.price
             prop.state = "sold"
 
-            # 2) từ chối các offer khác
-            (prop.offer_ids - offer).write({"status": "refused"})
+            # 2) từ chối các offer khác CHƯA có status
+            pending_offers = (prop.offer_ids - offer).filtered(lambda o: not o.status)
+            pending_offers.write({"status": "refused"})
 
             # 3) tạo Invoice khi SOLD (yêu cầu 'account' đã cài)
             #    tạo 1 hóa đơn out_invoice cho buyer với 1 dòng giá = price

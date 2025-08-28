@@ -30,12 +30,37 @@
         </field>
     </record>
 
+    <!-- Search View -->
+    <record id="view_estate_property_search" model="ir.ui.view">
+        <field name="name">estate.property.search</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="property_type_id" />
+                <filter string="New" name="new" domain="[('state', '=', 'new')]" />
+                <filter string="Sold" name="sold" domain="[('state', '=', 'sold')]" />
+                <filter string="Canceled" name="canceled" domain="[('state', '=', 'canceled')]" />
+                <group expand="0" string="Group By">
+                    <filter string="Property Type" name="group_type"
+                        context="{'group_by': 'property_type_id'}" />
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
     <!-- Form View -->
     <record id="view_estate_property_form" model="ir.ui.view">
         <field name="name">estate.property.form</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
             <form string="Property">
+                <header>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="new,sold"
+                        statusbar_colors="{'new':'blue','sold':'green'}" />
+                </header>
                 <sheet>
                     <group>
                         <group>
