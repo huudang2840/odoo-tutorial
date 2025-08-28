@@ -60,76 +60,55 @@
 
                                 <tree editable="bottom"
                                     create="true"
-                                    delete="true"
+                                    delete="false"
                                     decoration-success="status == 'accepted'"
                                     decoration-danger="status == 'refused'"
                                     decoration-muted="status == 'expired'">
 
                                     <field name="property_id" invisible="1" />
-
-                                    <!-- Buyer -->
-                                    <field name="partner_id"
-                                        groups="estate.group_estate_buyer"
-                                        options="{'no_create': True}" />
-
-                                    <!-- Manager -->
-                                    <field name="partner_id"
-                                        groups="estate.group_estate_manager"
-                                        options="{'no_create': True}" />
-
+                                    <field name="partner_id" options="{'no_create': True}" />
                                     <field name="price" readonly="status != False" />
                                     <field name="validity" readonly="status != False" />
                                     <field name="deadline" readonly="1" />
                                     <field name="status" readonly="1" />
 
-                                    <button name="action_accept"
-                                        string="Accept"
-                                        type="object"
-                                        class="oe_highlight"
+                                    <!-- Custom action buttons - all aligned now -->
+                                    <button name="action_accept" string="Accept" type="object"
+                                        icon="fa-check"
                                         groups="estate.group_estate_manager"
-                                        invisible="status != False or property_id.state == 'sold'" />
+                                        invisible="status != False" />
 
-                                    <button name="action_refuse"
-                                        string="Refuse"
-                                        type="object"
-                                        class="oe_link"
+                                    <button name="action_refuse" string="Refuse" type="object"
+                                        icon="fa-times"
                                         groups="estate.group_estate_manager"
-                                        invisible="status != False or property_id.state == 'sold'" />
+                                        invisible="status != False" />
+
+                                    <button name="unlink" type="object"
+                                        icon="fa-trash"
+                                        class="btn-danger"
+                                        confirm="Are you sure you want to delete this offer?"
+                                        groups="estate.group_estate_manager" />
                                 </tree>
 
                                 <!-- Form con (popup) -->
                                 <form>
                                     <group>
                                         <field name="property_id" invisible="1" />
-
-                                        <field name="partner_id"
-                                            groups="estate.group_estate_buyer"
-                                            options="{'no_create': True}" />
-
-                                        <field name="partner_id"
-                                            groups="estate.group_estate_manager"
-                                            options="{'no_create': True}" />
-
+                                        <field name="partner_id" options="{'no_create': True}" />
                                         <field name="price" readonly="status != False" />
                                         <field name="validity" readonly="status != False" />
                                         <field name="deadline" readonly="1" />
                                         <field name="status" readonly="1" />
                                     </group>
                                     <footer>
-                                        <button name="action_accept"
-                                            string="Accept"
-                                            type="object"
+                                        <button name="action_accept" string="Accept" type="object"
                                             class="oe_highlight"
                                             groups="estate.group_estate_manager"
-                                            invisible="status != False or property_id.state == 'sold'" />
-
-                                        <button name="action_refuse"
-                                            string="Refuse"
-                                            type="object"
+                                            invisible="status != False" />
+                                        <button name="action_refuse" string="Refuse" type="object"
                                             class="oe_link"
                                             groups="estate.group_estate_manager"
-                                            invisible="status != False or property_id.state == 'sold'" />
-
+                                            invisible="status != False" />
                                         <button string="Close" special="cancel" class="oe_link" />
                                     </footer>
                                 </form>
@@ -151,7 +130,7 @@
                         type="object"
                         class="oe_link"
                         groups="estate.group_estate_manager"
-                        invisible="state == 'sold' or state == 'canceled'" />
+                        invisible="state in ['sold', 'canceled']" />
                 </footer>
             </form>
         </field>
