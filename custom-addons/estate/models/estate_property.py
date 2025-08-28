@@ -38,23 +38,6 @@ class EstateProperty(models.Model):
             if rec.selling_price and rec.selling_price < 0.9 * rec.expected_price:
                 raise ValidationError("Selling price must be at least 90% of the expected price.")
 
-    # # --- KHÓA CHỈNH SỬA KHI SOLD ---
-    # def write(self, vals):
-    #     # Không cho sửa bất cứ field nào nếu property đã Sold
-    #     if any(rec.state == "sold" for rec in self):
-    #         raise ValidationError("Sold properties are locked and cannot be modified.")
-    #     # Nếu muốn khóa luôn khi 'canceled', dùng:
-    #     # if any(rec.state in ("sold", "canceled") for rec in self):
-    #     return super().write(vals)
-
-    # def unlink(self):
-    #     # Không cho xoá nếu property đã Sold
-    #     if any(rec.state == "sold" for rec in self):
-    #         raise ValidationError("Sold properties cannot be deleted.")
-    #     # Nếu muốn khóa luôn khi 'canceled', dùng:
-    #     # if any(rec.state in ("sold", "canceled") for rec in self):
-    #     return super().unlink()
-
     # --- ACTIONS ---
     def action_sold(self):
         for rec in self:
