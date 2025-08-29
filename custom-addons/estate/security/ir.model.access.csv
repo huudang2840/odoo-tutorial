@@ -7,3 +7,6 @@ access_offer_buyer,Offer buyer,estate.model_estate_property_offer,estate.group_e
 
 access_type_manager,Type manager,estate.model_estate_property_type,estate.group_estate_manager,1,1,1,1
 access_type_buyer_read,Type buyer read,estate.model_estate_property_type,estate.group_estate_buyer,1,0,0,0
+
+access_estate_report_manager_read,Estate report manager read,estate.model_estate_report,estate.group_estate_manager,1,0,0,0
+access_estate_report_buyer_read,Estate report buyer read,estate.model_estate_report,estate.group_estate_buyer,1,0,0,0

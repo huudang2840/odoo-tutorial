@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Client Action -->
+    <record id="estate_dashboard_action" model="ir.actions.client">
+        <field name="name">Estate Dashboard</field>
+        <field name="tag">estate.dashboard</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_estate_dashboard"
+        name="Dashboard"
+        parent="menu_estate_root"
+        action="estate_dashboard_action"
+        sequence="5" />
+</odoo>

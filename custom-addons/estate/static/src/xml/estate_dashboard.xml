@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+  <t t-name="estate.Dashboard">
+    <div class="container-fluid py-3" style="max-height: 100vh; overflow-y: auto;">
+
+            <!-- KPI -->
+      <div class="row g-3">
+        <div class="col-xl-3 col-md-6 col-12">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="text-muted small mb-1">Tổng property</div>
+              <div class="display-6 fw-bold" t-esc="state.kpiFmt.total_properties"/>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6 col-12">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="text-muted small mb-1">Đang rao bán</div>
+              <div class="display-6 fw-bold" t-esc="state.kpiFmt.for_sale"/>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6 col-12">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="text-muted small mb-1">Đã bán (tháng này)</div>
+              <div class="display-6 fw-bold" t-esc="state.kpiFmt.sold_this_month"/>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-md-6 col-12">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="text-muted small mb-1">Giá bán TB</div>
+              <div class="display-6 fw-bold" t-esc="state.kpiFmt.avg_selling_price_all"/>
+              <div class="text-muted small">Tháng này: <t t-esc="state.kpiFmt.avg_selling_price_month"/> đ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+            <!-- Charts -->
+      <div class="row g-3 mt-1">
+        <div class="col-lg-6 col-12">
+          <div class="card h-100">
+            <div class="card-body">
+              <h6 class="card-title mb-2">Doanh thu theo tháng</h6>
+              <div style="height:320px"><canvas id="est_chart_sales"></canvas></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-12">
+          <div class="card h-100">
+            <div class="card-body">
+              <h6 class="card-title mb-2">Số offer theo loại BĐS</h6>
+              <div style="height:320px"><canvas id="est_chart_offers"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </t>
+</templates>
